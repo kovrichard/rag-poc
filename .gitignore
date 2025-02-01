@@ -175,3 +175,5 @@ dist
 .DS_Store
 
 uploads/
+
+test/data/05-versions-space.pdf.txt
