@@ -25,7 +25,9 @@ export async function embedDocument(
   );
 }
 
-export async function searchDocuments(query: string): Promise<string[]> {
+export async function searchDocuments(
+  query: string
+): Promise<(TemporaryDocument & { filename?: string })[]> {
   const embedding = await embedText(query);
   const { filename, page } = await extractMetadata(query);
 
@@ -37,17 +39,16 @@ export async function searchDocuments(query: string): Promise<string[]> {
   const whereClause = whereClauses.join(" AND ");
 
   const searchQuery = `
-    SELECT content
+    SELECT content, filename, page
     FROM documents
     ${whereClause ? `WHERE ${whereClause}` : ""}
     ORDER BY embedding <#> $1::vector
     LIMIT 5
   `;
 
-  const results = await prisma.$queryRawUnsafe<{ content: string }[]>(
-    searchQuery,
-    embedding
-  );
+  const results = await prisma.$queryRawUnsafe<
+    (TemporaryDocument & { filename?: string })[]
+  >(searchQuery, embedding);
 
-  return results.map((result) => result.content);
+  return results;
 }
