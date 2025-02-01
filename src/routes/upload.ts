@@ -1,6 +1,8 @@
-import fs from "fs";
+import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
+import { Document } from "@langchain/core/documents";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { type Request, type Response } from "express";
-import pdf from "pdf-parse";
+import { TextLoader } from "langchain/document_loaders/fs/text";
 import { embedDocument } from "../dao/documents";
 
 export async function uploadHandler(req: Request, res: Response): Promise<void> {
@@ -10,31 +12,33 @@ export async function uploadHandler(req: Request, res: Response): Promise<void> 
   }
 
   const { path, mimetype } = req.file;
-  let data: string;
+  let data: string[];
 
   if (mimetype === "text/plain") {
-    data = prepareTxtFile(path);
+    data = await prepareFile(new TextLoader(path));
   } else if (mimetype === "application/pdf") {
-    data = await preparePdfFile(path);
+    data = await prepareFile(new PDFLoader(path));
   } else {
     res.status(400).json({ message: "File type not supported" });
     return;
   }
 
-  await embedDocument(data);
+  const storePromises = data.map((text: string) => embedDocument(text));
+  await Promise.all(storePromises);
 
   res.json({ message: "File uploaded" });
 }
 
-function prepareTxtFile(path: string): string {
-  const data = fs.readFileSync(path, "utf8");
+async function prepareFile(loader: TextLoader | PDFLoader): Promise<string[]> {
+  const parentDocuments = await loader.load();
 
-  return data;
-}
+  const splitter = new RecursiveCharacterTextSplitter({
+    chunkSize: 1000,
+    chunkOverlap: 200,
+    separators: [" "],
+  });
 
-async function preparePdfFile(path: string): Promise<string> {
-  const file = fs.readFileSync(path);
-  const data = await pdf(file);
+  const docs = await splitter.splitDocuments(parentDocuments);
 
-  return data.text;
+  return docs.map((doc) => doc.pageContent);
 }
