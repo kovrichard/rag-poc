@@ -39,13 +39,12 @@
             }
           },
           "400": {
-            "description": "Bad Request - File is required",
+            "description": "Bad Request",
             "schema": {
               "type": "object",
               "properties": {
                 "message": {
-                  "type": "string",
-                  "example": "File is required"
+                  "type": "string"
                 }
               }
             }
