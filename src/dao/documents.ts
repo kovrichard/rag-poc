@@ -21,7 +21,7 @@ export async function searchDocuments(query: string): Promise<string[]> {
       SELECT content
       FROM documents
       ORDER BY embedding <#> $1::vector
-        LIMIT 10
+      LIMIT 5
     `;
 
   const results = await prisma.$queryRawUnsafe<{ content: string }[]>(
