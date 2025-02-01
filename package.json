@@ -3,7 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun run src/index.ts",
+    "dev": "bun --hot run src/index.ts",
     "type-check": "tsc --noEmit",
     "lint-staged": "lint-staged",
     "lint-check": "biome lint --write ./src",
@@ -18,10 +18,15 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@types/bun": "latest",
+    "@types/express": "5.0.0",
     "husky": "9.1.7",
     "lint-staged": "15.4.3"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "express": "4.21.2",
+    "joi": "17.13.3"
   }
 }
