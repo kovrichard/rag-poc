@@ -5,6 +5,8 @@ const schema = Joi.object({
   host: Joi.string().required(),
   port: Joi.number().default(3000),
   authority: Joi.string().required(),
+  databaseUrl: Joi.string().uri().required(),
+  secret: Joi.string().required(),
 });
 
 const config = {
@@ -12,6 +14,8 @@ const config = {
   host: process.env.HOST,
   port: process.env.PORT,
   authority: `${process.env.HOST}:${process.env.PORT}`,
+  databaseUrl: process.env.DATABASE_URL,
+  secret: process.env.SECRET,
 };
 
 const { error, value: conf } = schema.validate(config);

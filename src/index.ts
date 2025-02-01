@@ -1,31 +1,16 @@
 import cors from "cors";
 import express, { type NextFunction, type Request, type Response } from "express";
-import multer from "multer";
 import conf from "./lib/config";
+import { authMiddleware, corsOptions, uploadMiddleware } from "./lib/middlewares";
 import { searchHandler } from "./routes/search";
 import { uploadHandler } from "./routes/upload";
-
-const corsOptions = {
-  origin: ["http://localhost:3000", "http://localhost:8080"],
-  optionsSuccessStatus: 200,
-};
-
-const upload = multer({
-  dest: "uploads/",
-  fileFilter: (_req: Request, file, cb) => {
-    if (file.mimetype !== "application/pdf" && file.mimetype !== "text/plain") {
-      cb(new Error("File type not supported"));
-    } else {
-      cb(null, true);
-    }
-  },
-});
 
 const app = express();
 
 app.use("*", cors(corsOptions));
+app.use(authMiddleware);
 
-app.post("/upload", upload.single("document"), uploadHandler);
+app.post("/upload", uploadMiddleware.single("document"), uploadHandler);
 app.get("/search", searchHandler);
 
 app.use((_req: Request, res: Response) => {

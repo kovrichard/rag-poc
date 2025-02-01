@@ -38,6 +38,10 @@ Upload any TXT or PDF file to the `/upload` endpoint.
 
 Send queries to the `/search` endpoint.
 
+#### Authorization
+
+Set `Bearer dev-secret` as the authorization token.
+
 ## About the solution
 
 ### Metadata
