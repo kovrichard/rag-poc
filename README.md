@@ -30,6 +30,14 @@ make start
 docker compose up -d
 ```
 
+### Usage
+
+Open Swagger on [http://localhost:8080](http://localhost:8080) to interact with the API.
+
+Upload any TXT or PDF file to the `/upload` endpoint.
+
+Send queries to the `/search` endpoint.
+
 ## About the solution
 
 ### Metadata
