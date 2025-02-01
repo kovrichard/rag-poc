@@ -32,11 +32,17 @@ docker compose up -d
 
 ## About the solution
 
+### Metadata
+
 To simplify the application and user interface, metadata-based search keys are extracted from the user’s query instead of using a separate metadata search.
 
 First, a model extracts file names and page numbers if present in the user’s query. These are then used to narrow down and speed up the similarity search.
 
 The application computes relevance using the inner product of embeddings. Since the embeddings are normalized, the inner product is equivalent to the cosine similarity which is the [suggested similarity metric](https://help.openai.com/en/articles/6824809-embeddings-frequently-asked-questions) for OpenAI embeddings.
+
+### HNSW
+
+As more and more documents are added to the index, the search time increases linearly. To address this, the application uses a Hierarchical Navigable Small World (HNSW) index to speed up the search while maintaining high retrieval quality.
 
 ## Sources to load documents and split text
 
