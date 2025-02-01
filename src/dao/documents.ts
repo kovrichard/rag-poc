@@ -27,11 +27,10 @@ export async function embedDocument(
 
 export async function searchDocuments(query: string): Promise<string[]> {
   const embedding = await embedText(query);
-  const { title, filename, page, line } = await extractMetadata(query);
+  const { filename, page, line } = await extractMetadata(query);
 
   const whereClauses = [];
 
-  title && whereClauses.push(`title = '${title}'`);
   filename && whereClauses.push(`filename = '${filename}'`);
   page && whereClauses.push(`page = ${page}`);
   line && whereClauses.push(`line = ${line}`);
