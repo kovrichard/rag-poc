@@ -7,7 +7,7 @@ const metadataSchema = z.object({
   page: z.number().optional(),
 });
 
-const EMBEDDING_MODEL = "text-embedding-3-large";
+const EMBEDDING_MODEL = "text-embedding-3-small";
 const CHAT_MODEL = "gpt-4o-mini";
 
 const openaiClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });

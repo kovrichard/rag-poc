@@ -20,5 +20,5 @@ model Document {
   filename    String?
   page        Int?
   content     String
-  embedding   Unsupported("vector(3072)")
+  embedding   Unsupported("vector(1536)")
 }
