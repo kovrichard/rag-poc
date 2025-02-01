@@ -12,21 +12,21 @@ export async function uploadHandler(req: Request, res: Response): Promise<void> 
   }
 
   const { path, mimetype, originalname } = req.file;
-  let data: TemporaryDocument[];
+  let docs: TemporaryDocument[];
 
   if (mimetype === "text/plain") {
-    data = await prepareFile(new TextLoader(path));
+    docs = await prepareFile(new TextLoader(path));
   } else if (mimetype === "application/pdf") {
-    data = await prepareFile(new PDFLoader(path));
+    docs = await prepareFile(new PDFLoader(path));
   } else {
     res.status(400).json({ message: "File type not supported" });
     return;
   }
 
-  const storePromises = data.map((doc: TemporaryDocument) =>
+  const embedPromises = docs.map((doc: TemporaryDocument) =>
     embedDocument(doc, originalname)
   );
-  await Promise.all(storePromises);
+  await Promise.all(embedPromises);
 
   res.json({ message: "File uploaded" });
 }
