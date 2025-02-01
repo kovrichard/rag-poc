@@ -1,17 +1,28 @@
 import { createId } from "@paralleldrive/cuid2";
 import { embedText, extractMetadata } from "../lib/ai";
+import type { TemporaryDocument } from "../lib/types";
 import prisma from "./prisma";
 
-export async function embedDocument(text: string, filename: string): Promise<void> {
-  const embedding = await embedText(text);
+export async function embedDocument(
+  doc: TemporaryDocument,
+  filename: string
+): Promise<void> {
+  const embedding = await embedText(doc.content);
   const id = createId();
 
   const insertQuery = `
-      INSERT INTO documents (id, filename, content, embedding)
-      VALUES ($1, $2, $3, $4)
-    `;
+    INSERT INTO documents (id, filename, page, content, embedding)
+    VALUES ($1, $2, $3, $4, $5)
+  `;
 
-  await prisma.$queryRawUnsafe(insertQuery, id, filename, text, embedding);
+  await prisma.$queryRawUnsafe(
+    insertQuery,
+    id,
+    filename,
+    doc.page,
+    doc.content,
+    embedding
+  );
 }
 
 export async function searchDocuments(query: string): Promise<string[]> {

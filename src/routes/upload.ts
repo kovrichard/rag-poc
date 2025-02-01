@@ -1,9 +1,9 @@
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
-import { Document } from "@langchain/core/documents";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { type Request, type Response } from "express";
 import { TextLoader } from "langchain/document_loaders/fs/text";
 import { embedDocument } from "../dao/documents";
+import type { TemporaryDocument } from "../lib/types";
 
 export async function uploadHandler(req: Request, res: Response): Promise<void> {
   if (!req.file) {
@@ -12,7 +12,7 @@ export async function uploadHandler(req: Request, res: Response): Promise<void> 
   }
 
   const { path, mimetype, originalname } = req.file;
-  let data: string[];
+  let data: TemporaryDocument[];
 
   if (mimetype === "text/plain") {
     data = await prepareFile(new TextLoader(path));
@@ -23,13 +23,15 @@ export async function uploadHandler(req: Request, res: Response): Promise<void> 
     return;
   }
 
-  const storePromises = data.map((text: string) => embedDocument(text, originalname));
+  const storePromises = data.map((doc: TemporaryDocument) =>
+    embedDocument(doc, originalname)
+  );
   await Promise.all(storePromises);
 
   res.json({ message: "File uploaded" });
 }
 
-async function prepareFile(loader: TextLoader | PDFLoader): Promise<string[]> {
+async function prepareFile(loader: TextLoader | PDFLoader): Promise<TemporaryDocument[]> {
   const parentDocuments = await loader.load();
 
   const splitter = new RecursiveCharacterTextSplitter({
@@ -40,5 +42,8 @@ async function prepareFile(loader: TextLoader | PDFLoader): Promise<string[]> {
 
   const docs = await splitter.splitDocuments(parentDocuments);
 
-  return docs.map((doc) => doc.pageContent);
+  return docs.map((doc) => ({
+    content: doc.pageContent,
+    page: doc.metadata.loc.pageNumber,
+  }));
 }
