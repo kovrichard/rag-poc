@@ -11,7 +11,7 @@ export async function uploadHandler(req: Request, res: Response): Promise<void> 
     return;
   }
 
-  const { path, mimetype } = req.file;
+  const { path, mimetype, originalname } = req.file;
   let data: string[];
 
   if (mimetype === "text/plain") {
@@ -23,7 +23,7 @@ export async function uploadHandler(req: Request, res: Response): Promise<void> 
     return;
   }
 
-  const storePromises = data.map((text: string) => embedDocument(text));
+  const storePromises = data.map((text: string) => embedDocument(text, originalname));
   await Promise.all(storePromises);
 
   res.json({ message: "File uploaded" });
