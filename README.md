@@ -1,15 +1,35 @@
 # RAG Proof of Concept
 
-To install dependencies:
+## First steps
+
+Copy the `.env.sample` file to `.env` and set an OpenAI API key.
 
 ```bash
-bun install
+cp .env.sample .env
 ```
 
-To run:
+## Build
 
 ```bash
-bun run index.ts
+make build
+
+# or
+
+docker compose build
 ```
 
-This project was created using `bun init` in bun v1.1.34. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+# Run
+
+```bash
+make start
+
+# or
+
+docker compose up -d
+```
+
+## Sources to load documents and split text
+
+- [LangChain Recursive Text Splitter](https://js.langchain.com/docs/how_to/recursive_text_splitter/)
+- [LangChain PDF Loader](https://js.langchain.com/docs/integrations/document_loaders/file_loaders/pdf/)
+
