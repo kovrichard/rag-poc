@@ -1,4 +1,5 @@
 import { type Request, type Response } from "express";
+import { searchDocuments } from "../dao/documents";
 export async function searchHandler(req: Request, res: Response): Promise<void> {
   const { query } = req.query;
 
@@ -7,5 +8,7 @@ export async function searchHandler(req: Request, res: Response): Promise<void> 
     return;
   }
 
-  res.json({ query });
+  const documents = await searchDocuments(query as string);
+
+  res.json({ documents });
 }

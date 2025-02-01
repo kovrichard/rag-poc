@@ -13,3 +13,21 @@ export async function embedDocument(text: string): Promise<void> {
 
   await prisma.$queryRawUnsafe(insertQuery, id, text, embedding);
 }
+
+export async function searchDocuments(query: string): Promise<string[]> {
+  const embedding = await embedText(query);
+
+  const searchQuery = `
+      SELECT content
+      FROM documents
+      ORDER BY embedding <#> $1::vector
+        LIMIT 10
+    `;
+
+  const results = await prisma.$queryRawUnsafe<{ content: string }[]>(
+    searchQuery,
+    embedding
+  );
+
+  return results.map((result) => result.content);
+}
