@@ -43,7 +43,11 @@ async function prepareFile(loader: TextLoader | PDFLoader): Promise<TemporaryDoc
   const docs = await splitter.splitDocuments(parentDocuments);
 
   return docs.map((doc) => ({
-    content: doc.pageContent,
+    content: cleanText(doc.pageContent),
     page: doc.metadata.loc.pageNumber,
   }));
+}
+
+function cleanText(text: string): string {
+  return text.replace(/\s+/g, " ").trim();
 }
