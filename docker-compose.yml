@@ -7,3 +7,25 @@ services:
       - 3000:3000
     volumes:
       - ./:/usr/src/app/
+
+  db:
+    image: ankane/pgvector
+    ports:
+      # 5433 to avoid a potential port collision with a running postgres process on the host
+      - 5433:5432
+    environment:
+      POSTGRES_DB: dev_db
+      POSTGRES_USER: dev_user
+      POSTGRES_PASSWORD: dev_password
+      ALLOW_IP_RANGE: "172.0.0.0/8"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "dev_user", "-d", "dev_db"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+    command: ["postgres", "-c", "log_statement=none"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+
+volumes:
+  pgdata:
