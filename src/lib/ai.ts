@@ -5,7 +5,6 @@ import { z } from "zod";
 const metadataSchema = z.object({
   filename: z.string().optional(),
   page: z.number().optional(),
-  line: z.number().optional(),
 });
 
 const EMBEDDING_MODEL = "text-embedding-3-large";
@@ -25,7 +24,6 @@ export async function embedText(text: string): Promise<number[]> {
 export async function extractMetadata(text: string): Promise<{
   filename: string;
   page: number;
-  line: number;
 }> {
   const response = await openaiClient.chat.completions.create({
     model: CHAT_MODEL,
@@ -33,7 +31,7 @@ export async function extractMetadata(text: string): Promise<{
       {
         role: "system",
         content:
-          "Extract metadata from the following text if you find any. Metadata to extract includes filename, page, and line number. If a metadata cannot be extracted, return an empty string or 0, depending on the type.",
+          "Extract metadata from the following text if you find any. Metadata to extract are filename and page. If a metadata cannot be extracted, return an empty string or 0, depending on the type.",
       },
       {
         role: "user",

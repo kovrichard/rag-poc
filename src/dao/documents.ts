@@ -27,13 +27,12 @@ export async function embedDocument(
 
 export async function searchDocuments(query: string): Promise<string[]> {
   const embedding = await embedText(query);
-  const { filename, page, line } = await extractMetadata(query);
+  const { filename, page } = await extractMetadata(query);
 
   const whereClauses = [];
 
   filename && whereClauses.push(`filename = '${filename}'`);
   page && whereClauses.push(`page = ${page}`);
-  line && whereClauses.push(`line = ${line}`);
 
   const whereClause = whereClauses.join(" AND ");
 

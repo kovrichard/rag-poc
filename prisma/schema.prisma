@@ -18,9 +18,7 @@ model Document {
 
   id          String   @id @default(cuid())
   filename    String?
-  title       String?
   page        Int?
-  line        Int?
   content     String
   embedding   Unsupported("vector(3072)")
 }
