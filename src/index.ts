@@ -1,10 +1,15 @@
 import express, { type Request, type Response } from "express";
 import conf from "./lib/config";
+import { searchHandler } from "./routes/search";
+import { uploadHandler } from "./routes/upload";
 
 const app = express();
 
-app.get("/", (_req: Request, res: Response) => {
-  res.send("Hello World!");
+app.post("/upload", uploadHandler);
+app.get("/search", searchHandler);
+
+app.use((_req: Request, res: Response) => {
+  res.status(405).send("Method Not Allowed");
 });
 
 app.listen(process.env.PORT, () => {
