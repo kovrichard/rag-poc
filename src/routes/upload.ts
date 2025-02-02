@@ -37,7 +37,6 @@ async function prepareFile(loader: TextLoader | PDFLoader): Promise<TemporaryDoc
   const splitter = new RecursiveCharacterTextSplitter({
     chunkSize: 1000,
     chunkOverlap: 200,
-    separators: [" "],
   });
 
   const docs = await splitter.splitDocuments(parentDocuments);
