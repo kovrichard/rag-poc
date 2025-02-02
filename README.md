@@ -42,6 +42,27 @@ Send queries to the `/search` endpoint.
 
 Set `Bearer dev-secret` as the authorization token.
 
+## Example queries
+
+### Upload
+
+Upload each example file from the `examples` directory.
+
+- [test.pdf](examples/test.pdf)
+- [test.txt](examples/test.txt)
+- [the-fermi-paradox.pdf](examples/the-fermi-paradox.pdf)
+
+### Search
+
+Examples questions to ask:
+
+- What is the Great Filter?
+  + It should return page 7 of `the-fermi-paradox.pdf` as the first result.
+- Page 10 of the Fermi Paradox post
+  + It should return 3 items from page 10 of `the-fermi-paradox.pdf`.
+- How old is the lost ark?
+    + It should return page 1 of `test.pdf` containing the info that if the ark is real, it would be ~3000 years old.
+
 ## About the solution
 
 ### Metadata
