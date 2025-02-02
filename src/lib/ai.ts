@@ -30,8 +30,11 @@ export async function extractMetadata(text: string): Promise<{
     messages: [
       {
         role: "system",
-        content:
-          "Extract metadata from the following text if you find any. Metadata to extract are filename and page. If a metadata cannot be extracted, return an empty string or 0, depending on the type.",
+        content: ` Extract metadata from the following text if you find any.
+            Metadata to extract are filename and page.
+            Only extract the filename if the text contains a file extension (e.g. .pdf).
+            Do not guess the filename based on the title.
+            If a metadata cannot be extracted, return an empty string or 0, depending on the type.`,
       },
       {
         role: "user",
