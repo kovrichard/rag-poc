@@ -34,7 +34,8 @@
             "name": "document",
             "in": "formData",
             "required": true,
-            "type": "file"
+            "type": "file",
+            "example": "the-fermi-paradox.pdf"
           }
         ],
         "responses": {
@@ -79,7 +80,8 @@
             "in": "query",
             "required": true,
             "type": "string",
-            "description": "The search query"
+            "description": "The search query",
+            "example": "What is the Great Filter?"
           }
         ],
         "responses": {
