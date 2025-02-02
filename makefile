@@ -21,4 +21,4 @@ db:
 	docker compose exec db psql -U dev_user -d dev_db
 
 migrate:
-	docker compose exec server bun run migrate
+	docker compose exec server bun run migrate --skip-generate

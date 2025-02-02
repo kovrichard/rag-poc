@@ -30,6 +30,16 @@ make start
 docker compose up -d
 ```
 
+### Migrate database
+
+```bash
+make migrate
+
+# or
+
+docker compose exec server bun run migrate --skip-generate
+```
+
 ### Usage
 
 Open Swagger on [http://localhost:8080](http://localhost:8080) to interact with the API.
