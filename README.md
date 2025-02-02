@@ -62,6 +62,12 @@ As more and more documents are added to the index, the search time increases lin
 
 Since I was focusing on speed, I chose HNSW over IVFFlat, [sacrificing size for speed](https://tembo.io/blog/vector-indexes-in-pgvector).
 
+### Chunking
+
+I arbitrarily chose 1000 characters as the maximum chunk size with a 200 character overlap. Multiple blog posts used the same or similar values, and this configuration yielded good results while manually testing the application.
+
+The application uses a [`RecursiveCharacterTextSplitter`](https://js.langchain.com/docs/how_to/recursive_text_splitter/) to split the text into chunks. The default separators for the splitter are `["\n\n", "\n", " ", ""]`. This means that the app will first try to split the text by paragraphs, then by sentences, and finally by words, ensuring the highest possible semantic meaning in each chunk.
+
 ## Sources to load documents and split text
 
 - [LangChain Recursive Text Splitter](https://js.langchain.com/docs/how_to/recursive_text_splitter/)
