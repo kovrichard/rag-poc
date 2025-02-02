@@ -75,6 +75,8 @@ Examples questions to ask:
 
 ## About the solution
 
+The application is an Express server that uses PostgreSQL with the `pgvector` extension to store and search document embeddings.
+
 ### Metadata
 
 To simplify the application and user interface, metadata-based search keys are extracted from the user’s query instead of using a separate metadata search.
